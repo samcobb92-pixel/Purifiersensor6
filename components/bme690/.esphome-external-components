@@ -1,0 +1,5 @@
+# This file tells ESPHome to compile the C files in the component
+components:
+  bme690:
+    source_files:
+      - bme69x.c
