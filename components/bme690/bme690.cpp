@@ -26,7 +26,14 @@ void BME690Component::setup() {
   // Initialize the sensor
   int8_t rslt = bme69x_init(&this->gas_sensor_);
   if (rslt != BME69X_OK) {
-    ESP_LOGE(TAG, "Failed to initialize BME690 sensor! Error: %d", rslt);
+    ESP_LOGE(TAG, "Failed to initialize BME690 sensor! Error code: %d", rslt);
+    if (rslt == BME69X_E_NULL_PTR) {
+      ESP_LOGE(TAG, "  Error: NULL pointer");
+    } else if (rslt == BME69X_E_COM_FAIL) {
+      ESP_LOGE(TAG, "  Error: Communication failure - check I2C connections");
+    } else if (rslt == BME69X_E_DEV_NOT_FOUND) {
+      ESP_LOGE(TAG, "  Error: Device not found - wrong chip ID");
+    }
     this->mark_failed();
     return;
   }
